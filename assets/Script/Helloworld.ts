@@ -1,6 +1,7 @@
+import OtaClient from "@crowdin/ota-client";
+
 const {ccclass, property} = cc._decorator;
 
-import phoneNumberValid from 'google-libphonenumber'
 
 
 @ccclass
@@ -17,6 +18,6 @@ export default class Helloworld extends cc.Component {
     start () {
         // init logic
         this.label.string = this.text;
-        const phoneValue = phoneNumberValid.Pho
+        const client = new OtaClient('e51f15f25060624ff98eb89k8nm');
     }
 }
