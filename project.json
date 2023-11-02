@@ -1,0 +1,8 @@
+{
+  "engine": "cocos2d-html5",
+  "packages": "packages",
+  "version": "2.4.6",
+  "name": "Crowdin",
+  "id": "aa411d4c-7711-4c6b-8560-8441026416c8",
+  "isNew": false
+}
