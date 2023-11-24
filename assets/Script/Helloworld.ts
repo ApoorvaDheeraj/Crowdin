@@ -19,5 +19,6 @@ export default class Helloworld extends cc.Component {
         // init logic
         this.label.string = this.text;
         const client = new OtaClient('e51f15f25060624ff98eb89k8nm');
+        console.log(`Current Locale => ${client.getCurrentLocale()}`);
     }
 }
