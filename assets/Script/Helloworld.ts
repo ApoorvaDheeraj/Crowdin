@@ -8,7 +8,7 @@ const {ccclass, property} = cc._decorator;
 export default class Helloworld extends cc.Component {
 
     private crowdinOtaClient: OtaClient = null;
-    private crowdinDistributionKey : string = "db1c1861ea3734cf1fa39d9k8nm"
+    private crowdinDistributionKey : string = "7c8308103ad135f1cec0ce9k8nm"
 
 
     @property(cc.Label)
