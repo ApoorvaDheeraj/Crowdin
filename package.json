@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "@types/node": "^20.8.10"
+    "analytics-node": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20"
   }
 }
