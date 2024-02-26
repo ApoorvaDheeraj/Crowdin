@@ -10,8 +10,6 @@ export default class CrowdinOtaClient {
 
     private static readonly BASE_URL: string = "https://distributions.crowdin.net";
     private readonly httpClient: CrowdinHttpClient;
-    
-    private distributionURL: "";
 
     private crowdinManifestHolder?: Promise<CrowdinLangManifest>;
     private disableManifestCache = false;
@@ -28,7 +26,6 @@ export default class CrowdinOtaClient {
      */
     constructor(private distributionHash: string, config?: CrowdinClientConfig) {
         this.httpClient = config?.httpClient || new CrowdinAxiosHttpClient();
-        this.distributionURL = this.distributionURL;
         this.disableManifestCache = !!config?.disableManifestCache;
         this.locale = config?.languageCode;
         this.disableStringsCache = !!config?.disableStringsCache;
@@ -152,7 +149,7 @@ export default class CrowdinOtaClient {
             throw new Error(`File ${file} does not exists in manifest content`);
         }
         const timestamp = await this.getManifestTimestamp();
-        const url = `${this.distributionURL}/${this.distributionHash}${file}?timestamp=${timestamp}`;
+        const url = `${CrowdinOtaClient.BASE_URL}/${this.distributionHash}${file}?timestamp=${timestamp}`;
         return this.httpClient.get<string | any>(url).catch(() => null);
     }
 
@@ -241,7 +238,7 @@ export default class CrowdinOtaClient {
         if (this.crowdinManifestHolder && !this.disableManifestCache) {
             return this.crowdinManifestHolder;
         } else {
-            this.crowdinManifestHolder = this.httpClient.get(`${this.distributionURL}/${this.distributionHash}/manifest.json`);
+            this.crowdinManifestHolder = this.httpClient.get(`${CrowdinOtaClient.BASE_URL}/${this.distributionHash}/manifest.json`);
             return this.crowdinManifestHolder;
         }
     }
