@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "@crowdin/ota-client": "^1.1.0",
-    "@types/node": "^20.8.10",
-    "google-libphonenumber": "^3.2.33"
+    "@types/node": "^20.8.10"
   }
 }
