@@ -25,26 +25,6 @@ Follow these steps to integrate Cocos Creator 2.4.6 with Crowdin OTA Client:
 4. **Build and Run:**
    - Build and run your Cocos Creator project to see issues.
   
-## Editor Issue
-
-*I'm accessing OTA client by code can be seen [here](https://github.com/ApoorvaDheeraj/Crowdin/blob/main/assets/Script/Helloworld.ts) in the code*
-
-```javascript
-        const client = new OtaClient('e51f15f25060624ff98eb89k8nm');
-        console.log(`Current Locale => ${client.getCurrentLocale()}`);
-```
-
-
-
-![](https://github.com/ApoorvaDheeraj/Crowdin/assets/13048633/2b13c7b6-e6df-4cde-8392-4fd28be4970e)
-
-
-**Chrome Console issue after running the project**
-
-![Screenshot 2023-11-24 at 11 46 55 AM](https://github.com/ApoorvaDheeraj/Crowdin/assets/13048633/71c5ea44-8ec3-4751-b5d6-9c751dbcf31d)
-
-
-
 
 ## Issues and Support
 
