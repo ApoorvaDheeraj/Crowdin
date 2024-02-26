@@ -1,4 +1,5 @@
-import OtaClient from "./Libs/Crowdin/OtaClient";
+import CrowdinOtaClient from "./Libs/Crowdin/CrowdinOtaClient";
+
 
 const {ccclass, property} = cc._decorator;
 
@@ -7,7 +8,7 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class Helloworld extends cc.Component {
 
-    private crowdinOtaClient: OtaClient = null;
+    private crowdinOtaClient: CrowdinOtaClient = null;
     private crowdinDistributionKey : string = "db1c1861ea3734cf1fa39d9k8nm"
 
 
@@ -20,7 +21,7 @@ export default class Helloworld extends cc.Component {
     onLoad () {
         // init logic
         this.label.string = this.text;
-        this.crowdinOtaClient = new OtaClient(this.crowdinDistributionKey);
+        this.crowdinOtaClient = new CrowdinOtaClient(this.crowdinDistributionKey);
         console.warn(`Current Locale => ${JSON.stringify(this.crowdinOtaClient)}`);
 
         this.getLocalizationContent();

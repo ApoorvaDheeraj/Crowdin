@@ -1,7 +1,8 @@
 const axios = require("analytics-node/node_modules/axios")
-import { HttpClient } from './model';
+import { CrowdinHttpClient } from "./CrowdinModels";
 
-export class AxiosHttpClient implements HttpClient {
+export class CrowdinAxiosHttpClient implements CrowdinHttpClient {
+    
     private axios: any = axios.create({});
 
     async get<T>(url: string): Promise<T> {

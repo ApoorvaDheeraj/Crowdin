@@ -1,17 +1,19 @@
-import { AxiosHttpClient } from './axiosClient';
-import { isJsonFile, mergeDeep } from './strings';
-import { ClientConfig, HttpClient, LanguageStrings, LanguageTranslations, Manifest, Translations } from './model';
-
+import { CrowdinAxiosHttpClient } from './CrowdinAxiosHttpClient';
+import { CrowdinClientConfig, CrowdinHttpClient, CrowdinLangStrings, CrowdinLangTranslations, CrowdinLangManifest, CrowdinTranslations } from './CrowdinModels';
+import { CrowdinStringUtils } from './CrowdinStringUtils';
+ 
 /**
  * @category OtaClient
  */
-export default class OtaClient {
+export default class CrowdinOtaClient {
     /** @internal */
-    public static readonly BASE_URL = 'https://distributions.crowdin.net';
 
-    private readonly httpClient: HttpClient;
+    private static readonly BASE_URL: string = "https://distributions.crowdin.net";
+    private readonly httpClient: CrowdinHttpClient;
+    
+    private distributionURL: "";
 
-    private manifestHolder?: Promise<Manifest>;
+    private crowdinManifestHolder?: Promise<CrowdinLangManifest>;
     private disableManifestCache = false;
 
     private stringsCache: { [file: string]: Promise<any> } = {};
@@ -24,14 +26,14 @@ export default class OtaClient {
      * @param distributionHash hash of released Crowdin project distribution
      * @param config client config
      */
-    constructor(private distributionHash: string, config?: ClientConfig) {
-        this.httpClient = config?.httpClient || new AxiosHttpClient();
+    constructor(private distributionHash: string, config?: CrowdinClientConfig) {
+        this.httpClient = config?.httpClient || new CrowdinAxiosHttpClient();
+        this.distributionURL = this.distributionURL;
         this.disableManifestCache = !!config?.disableManifestCache;
         this.locale = config?.languageCode;
         this.disableStringsCache = !!config?.disableStringsCache;
         this.disableJsonDeepMerge = !!config?.disableJsonDeepMerge;
     }
-
     /**
      * Get the distribution hash
      *
@@ -75,7 +77,7 @@ export default class OtaClient {
      *
      * @category Content Management
      */
-    async getContent(): Promise<Manifest['content']> {
+    async getContent(): Promise<CrowdinLangManifest['content']> {
         return (await this.manifest).content;
     }
 
@@ -106,9 +108,9 @@ export default class OtaClient {
      *
      * @category Content Management
      */
-    async getTranslations(): Promise<Translations> {
+    async getTranslations(): Promise<CrowdinTranslations> {
         const languages = await this.listLanguages();
-        const translations: Translations = {};
+        const translations: CrowdinTranslations = {};
         await Promise.all(
             languages.map(async (language) => {
                 translations[language] = await this.getLanguageTranslations(language);
@@ -124,7 +126,7 @@ export default class OtaClient {
      *
      * @category Content Management
      */
-    async getLanguageTranslations(languageCode?: string): Promise<LanguageTranslations[]> {
+    async getLanguageTranslations(languageCode?: string): Promise<CrowdinLangTranslations[]> {
         const language = this.getLanguageCode(languageCode);
         const content = await this.getContent();
         const files = content[language] || [];
@@ -150,7 +152,7 @@ export default class OtaClient {
             throw new Error(`File ${file} does not exists in manifest content`);
         }
         const timestamp = await this.getManifestTimestamp();
-        const url = `${OtaClient.BASE_URL}/${this.distributionHash}${file}?timestamp=${timestamp}`;
+        const url = `${this.distributionURL}/${this.distributionHash}${file}?timestamp=${timestamp}`;
         return this.httpClient.get<string | any>(url).catch(() => null);
     }
 
@@ -159,9 +161,9 @@ export default class OtaClient {
      *
      * @category Strings Management
      */
-    async getStrings(): Promise<LanguageStrings> {
+    async getStrings(): Promise<CrowdinLangStrings> {
         const content = await this.getJsonFiles();
-        const res: LanguageStrings = {};
+        const res: CrowdinLangStrings = {};
         await Promise.all(
             Object.entries(content).map(async ([lang, files]) => {
                 res[lang] = await this.getStringsByFilesAndLocale(files);
@@ -229,18 +231,18 @@ export default class OtaClient {
             if (this.disableJsonDeepMerge) {
                 strings = { ...strings, ...content };
             } else {
-                mergeDeep(strings, content);
+                CrowdinStringUtils.mergeDeep(strings, content);
             }
         }
         return strings;
     }
 
-    private get manifest(): Promise<Manifest> {
-        if (this.manifestHolder && !this.disableManifestCache) {
-            return this.manifestHolder;
+    private get manifest(): Promise<CrowdinLangManifest> {
+        if (this.crowdinManifestHolder && !this.disableManifestCache) {
+            return this.crowdinManifestHolder;
         } else {
-            this.manifestHolder = this.httpClient.get(`${OtaClient.BASE_URL}/${this.distributionHash}/manifest.json`);
-            return this.manifestHolder;
+            this.crowdinManifestHolder = this.httpClient.get(`${this.distributionURL}/${this.distributionHash}/manifest.json`);
+            return this.crowdinManifestHolder;
         }
     }
 
@@ -255,10 +257,10 @@ export default class OtaClient {
         }
     }
 
-    private async getJsonFiles(): Promise<Manifest['content']> {
+    private async getJsonFiles(): Promise<CrowdinLangManifest['content']> {
         const content = await this.getContent();
-        const res: Manifest['content'] = {};
-        Object.entries(content).forEach(([lang, files]) => (res[lang] = files.filter(isJsonFile)));
+        const res: CrowdinLangManifest['content'] = {};
+        Object.entries(content).forEach(([lang, files]) => (res[lang] = files.filter(CrowdinStringUtils.isJsonFile)));
         return res;
     }
 }

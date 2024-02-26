@@ -1,8 +1,8 @@
-export interface ClientConfig {
+export interface CrowdinClientConfig {
     /**
      * Specify your own http client. Default uses axios
      */
-    httpClient?: HttpClient;
+    httpClient?: CrowdinHttpClient;
     /**
      * Disable cache of distribution manifest. Default is false
      */
@@ -30,7 +30,7 @@ export interface ClientConfig {
     enterpriseOrganizationDomain?: string;
 }
 
-export interface HttpClient {
+export interface CrowdinHttpClient {
     /**
      * Executes HTTP GET request
      *
@@ -39,49 +39,49 @@ export interface HttpClient {
     get<T>(url: string): Promise<T>;
 }
 
-export interface Manifest {
+export interface CrowdinLangManifest {
     files: string[];
     languages: string[];
     timestamp: number;
     // these next two arrays will always be empty if they are arrays, the never type just avoids an eslint error
-    language_mapping: LanguageMappings | never[];
-    custom_languages: CustomLanguages | never[];
+    language_mapping: CrowdinLangMappings | never[];
+    custom_languages: CrowdinCustomLanguages | never[];
     content: {
         [languageCode: string]: string[];
     };
     mapping: string[];
 }
 
-export interface LanguageMappings {
-    [languageCode: string]: LanguageMapping;
+export interface CrowdinLangMappings {
+    [languageCode: string]: CrowdinLangMapping;
 }
 
-export interface CustomLanguages {
-    [languageCode: string]: CustomLanguageRaw;
+export interface CrowdinCustomLanguages {
+    [languageCode: string]: CrowdinCustomLanguage;
 }
 
-export interface LanguageMapping {
+export interface CrowdinLangMapping {
     [placeholder: string]: string;
 }
 
-export interface Translations {
-    [languageCode: string]: LanguageTranslations[];
+export interface CrowdinTranslations {
+    [languageCode: string]: CrowdinLangTranslations[];
 }
 
-export interface LanguageTranslations {
+export interface CrowdinLangTranslations {
     file: string;
     content: string | any | null;
 }
 
-export interface LanguageFiles {
+export interface CrowdinLangFiles {
     [languageCode: string]: string[];
 }
 
-export interface LanguageStrings {
+export interface CrowdinLangStrings {
     [languageCode: string]: any;
 }
 
-export interface CustomLanguageRaw {
+export interface CrowdinCustomLanguage {
     name: string;
     two_letters_code: string;
     three_letters_code: string;
