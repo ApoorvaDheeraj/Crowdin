@@ -19,7 +19,7 @@ Follow these steps to integrate Cocos Creator 2.4.6 with Crowdin OTA Client:
    ```
 
 3. **Configuration:**
-   - Install Crowdin OTA npm package by running npm install.
+   - Install npm package by running npm install.
 
    
 4. **Build and Run:**
