@@ -2,16 +2,29 @@
  * CloudLocalizationController to get Data from Crowdin 
  */
 
-import CrowdinOtaClient from "./Libs/CrowdinOtaClient";
+import CrowdinOtaClient from "./Libs/Crowdin/CrowdinOtaClient";
+
 
 
 export default class CloudLocalizationController{
 
     private crowdinOtaClient: CrowdinOtaClient = null;
-    private crowdinDistributionKey : string = "db1c1861ea3734cf1fa39d9k8nm"
+    private crowdinDistributionKey : string = "7c8308103ad135f1cec0ce9k8nm"
 
-    constructor() {
+    private static instance: CloudLocalizationController;
+
+    static getInstance(): CloudLocalizationController {
+        if (!CloudLocalizationController.instance) {
+          CloudLocalizationController.instance = new CloudLocalizationController();
+        }
+        return CloudLocalizationController.instance;
+      }
+
+    private constructor() {
         this.crowdinOtaClient = new CrowdinOtaClient(this.crowdinDistributionKey);
+        this.crowdinOtaClient.getStrings().then(res => console.warn(res)).catch(error => console.error(error));
+        console.warn(JSON.stringify(this.crowdinOtaClient));
+        // this.getLocalizationContent();
     }
 
     getLocalizationContent(){
